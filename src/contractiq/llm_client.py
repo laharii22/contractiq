@@ -12,10 +12,10 @@ from anthropic import (
 )
 
 
-# Find the main ContractIQ project folder
+# It helps in finding the main ContractIQ project folder
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-# Load environment variables from the project's .env file
+# Loads environment variables from the project's .env file
 load_dotenv(PROJECT_ROOT / ".env")
 
 
@@ -61,3 +61,19 @@ def send_test_message(prompt: str) -> str:
             f"Anthropic API returned status {error.status_code}."
         ) from error
 
+def analyse_contract(text: str) -> str:
+    # Helps in checking whether the contract contains text
+    if not text.strip():
+        raise ValueError("Contract text cannot be empty.")
+
+    # Helps in preparing instructions for analysing the contract
+    prompt = (
+        "Summarise the following contract in simple English. "
+        "Identify the main parties, obligations, and important dates. "
+        "Only use information present in the contract. "
+        "Do not invent missing details.\n\n"
+        f"Contract:\n{text}"
+    )
+
+    # Helps in sending the contract text to Claude
+    return send_test_message(prompt)
